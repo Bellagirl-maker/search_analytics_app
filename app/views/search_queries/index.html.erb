@@ -1,5 +1,10 @@
 <h1>Realtime Search</h1>
-<input type="text" id="searchBox" placeholder="Type to search..." autocomplete="off" />
+<%= form_with url: search_queries_path, method: :post, local: true do %>
+  <%= text_field_tag :query_text, nil, placeholder: "Enter your search..." %>
+  <%= submit_tag "Search" %>
+<% end %>
+
+  
 
 <script>
   let timeout;
@@ -26,3 +31,10 @@
     }, 300);
   });
 </script>
+
+<h2>Top Searches</h2>
+<ul>
+  <% @top_queries.each do |query, count| %>
+    <li><%= query %> — <%= count %> searches</li>
+  <% end %>
+</ul>
