@@ -1,2 +1,28 @@
-<h1>SearchQueries#index</h1>
-<p>Find me in app/views/search_queries/index.html.erb</p>
+<h1>Realtime Search</h1>
+<input type="text" id="searchBox" placeholder="Type to search..." autocomplete="off" />
+
+<script>
+  let timeout;
+  let previousValue = '';
+
+  document.getElementById('searchBox').addEventListener('input', function (e) {
+    const currentValue = e.target.value;
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      if (currentValue.trim() && currentValue !== previousValue) {
+        previousValue = currentValue;
+
+        fetch('/search_queries', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").content
+          },
+          body: JSON.stringify({ query_text: currentValue })
+        });
+      }
+    }, 300);
+  });
+</script>
